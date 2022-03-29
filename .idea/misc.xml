@@ -4,11 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_admin_login.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_admin_main.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_main.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_register.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_store.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/fragment_admin_home.xml" value="0.31927083333333334" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/fragment_update_stock.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/fragment_view_customers.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/menu/admin_bottom_nav.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/menu/admin_login_menu.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/menu/back_to_customer_login.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/menu/user_logout.xml" value="0.3333333333333333" />
       </map>
     </option>
   </component>

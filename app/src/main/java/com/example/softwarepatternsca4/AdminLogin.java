@@ -29,6 +29,7 @@ public class AdminLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_login);
+        getSupportActionBar().setTitle("Admin Login");
 
         db = FirebaseFirestore.getInstance();
         EditText username = findViewById(R.id.adminUserName);
@@ -49,12 +50,14 @@ public class AdminLogin extends AppCompatActivity {
                            if(task.isSuccessful()){
                                for(DocumentSnapshot doc : task.getResult()){
                                    dbData = doc.getData();
+
                                }
 
                                Object[] values = dbData.values().toArray();
-                               String username = values[0].toString();
-                               String password = values[1].toString();
+                               String username = values[1].toString();
+                               String password = values[0].toString();
                                if(username.equalsIgnoreCase(usernameString) && password.equalsIgnoreCase(passwordString)){
+                                   Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
                                    Intent i = new Intent(AdminLogin.this, AdminMain.class);
                                    startActivity(i);
                                } else{
