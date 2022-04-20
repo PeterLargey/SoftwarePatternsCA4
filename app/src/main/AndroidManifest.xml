@@ -10,13 +10,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SoftwarePatternsCA4">
         <activity
+            android:name=".Checkout"
+            android:exported="true" />
+        <activity
+            android:name=".CustomerMain"
+            android:exported="true" />
+        <activity
+            android:name=".SalesDetails"
+            android:exported="true" />
+        <activity
+            android:name=".CustomerDetails"
+            android:exported="true" />
+        <activity
+            android:name=".ItemDetails"
+            android:exported="true" />
+        <activity
             android:name=".AdminMain"
             android:exported="true" />
         <activity
             android:name=".AdminLogin"
-            android:exported="true" />
-        <activity
-            android:name=".Store"
             android:exported="true" />
         <activity
             android:name=".Register"

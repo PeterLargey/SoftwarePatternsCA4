@@ -5,15 +5,31 @@
       <map>
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_admin_login.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_admin_main.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_customer_details.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_customer_main.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_item_details.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_main.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_register.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_sales_details.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/activity_store.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/admin_catalogue_recycler_layout.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/cart_recycler_layout.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/customer_catalogue_recycler_layout.xml" value="0.1" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/customer_recycler_layout.xml" value="0.33" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/fragment_add_stock_item.xml" value="0.33" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/fragment_admin_home.xml" value="0.31927083333333334" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/fragment_cart.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/fragment_ratings.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/fragment_store.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/fragment_update_stock.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/fragment_view_customers.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/sales_recycler_layout.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/layout/sold_items_recycler_layout.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/menu/admin_bottom_nav.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/menu/admin_login_menu.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/menu/back_menu.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/menu/back_to_customer_login.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/menu/customer_bottom_nav.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/peter/AndroidStudioProjects/SoftwarePatternsCA4/app/src/main/res/menu/user_logout.xml" value="0.3333333333333333" />
       </map>
     </option>

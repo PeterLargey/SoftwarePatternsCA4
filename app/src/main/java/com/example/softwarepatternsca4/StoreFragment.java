@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -24,34 +25,48 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 
-public class AdminHomeFragment extends Fragment {
+public class StoreFragment extends Fragment {
 
     private FirebaseFirestore db;
-    private RecyclerView catalogue;
-    private AdminCatalogueAdapter adapter;
-    private SearchView search;
-    private ArrayList<Items> items;
+    private storeAdapter storeAdapter;
+    private RecyclerView storeCatalogue;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
+    private ArrayList<Items> items;
+    private SearchView search;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View adminHomeView = inflater.inflate(R.layout.fragment_admin_home, container, false);
+        View storeView = inflater.inflate(R.layout.fragment_store, container, false);
+
         db = FirebaseFirestore.getInstance();
 
-        catalogue = adminHomeView.findViewById(R.id.adminCatalogueRecycler);
-        catalogue.addItemDecoration(new DividerItemDecoration(adminHomeView.getContext(), DividerItemDecoration.VERTICAL));
-        getData();
+        storeCatalogue = storeView.findViewById(R.id.catalogueRecycler);
+        storeCatalogue.addItemDecoration(new DividerItemDecoration(storeView.getContext(), DividerItemDecoration.VERTICAL));
 
-        search = adminHomeView.findViewById(R.id.adminSearch);
+        db.collection("Catalogue").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    items = new ArrayList<>();
+                    for(DocumentSnapshot doc: task.getResult()){
+                        items.add(doc.toObject(Items.class));
+                    }
+                    setUpRecycler(items);
+
+                }
+            }
+        });
+
+        search = storeView.findViewById(R.id.customerSearch);
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if(items.contains(query)){
-                    adapter.getFilter().filter(query);
-                } else {
-                    Toast.makeText(adminHomeView.getContext(), "No Match found",Toast.LENGTH_LONG).show();
+                    storeAdapter.getFilter().filter(query);
+                }else {
+                    Toast.makeText(storeView.getContext(), "No Match found",Toast.LENGTH_LONG).show();
                 }
                 return false;
             }
@@ -61,30 +76,14 @@ public class AdminHomeFragment extends Fragment {
                 return false;
             }
         });
-        return adminHomeView;
+
+        return storeView;
     }
 
-
-    private void getData(){
-        db.collection("Catalogue").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-               if(task.isSuccessful()){
-                   items = new ArrayList<>();
-                   for(DocumentSnapshot doc: task.getResult()){
-                       items.add(doc.toObject(Items.class));
-                   }
-                   setUpRecycler(items);
-
-               }
-            }
-        });
-    }
-
-    private void setUpRecycler(ArrayList<Items> items){
-        adapter = new AdminCatalogueAdapter(items);
+    private void setUpRecycler(ArrayList<Items> items) {
+        storeAdapter = new storeAdapter(items);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-        catalogue.setLayoutManager(staggeredGridLayoutManager);
-        catalogue.setAdapter(adapter);
+        storeCatalogue.setLayoutManager(staggeredGridLayoutManager);
+        storeCatalogue.setAdapter(storeAdapter);
     }
 }

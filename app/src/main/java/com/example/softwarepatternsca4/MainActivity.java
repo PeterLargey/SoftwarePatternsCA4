@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
-                                Intent i = new Intent(MainActivity.this, Store.class);
+                                Intent i = new Intent(MainActivity.this, CustomerMain.class);
+                                i.putExtra("email", emailString);
                                 startActivity(i);
                             }else{
                                 Toast.makeText(getApplicationContext(), "Login Failed, Account doesn't exist", Toast.LENGTH_LONG).show();

@@ -8,21 +8,15 @@
         android:enabled="true"/>
 
     <item
-        android:id="@+id/adminUpdate"
-        android:title="Update Stock"
-        android:icon="@drawable/ic_baseline_update_24"
-        android:enabled="true"/>
-
-    <item
         android:id="@+id/viewCustomers"
         android:title="Customers"
         android:icon="@drawable/ic_baseline_people_alt_24"
         android:enabled="true"/>
 
     <item
-        android:id="@+id/adminPurchase"
-        android:title="Purchase Stock"
-        android:icon="@drawable/ic_baseline_euro_24"
+        android:id="@+id/adminAddStockItem"
+        android:title="Add Item"
+        android:icon="@drawable/ic_baseline_add_box_24"
         android:enabled="true"/>
 
 </menu>
