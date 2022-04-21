@@ -48,6 +48,7 @@ public class Checkout extends AppCompatActivity {
     private final String TAG = "TAG";
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private String docId;
+    private Button applyDiscount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,15 +72,27 @@ public class Checkout extends AppCompatActivity {
         checkoutEmail.setText(email);
 
         discountCode = findViewById(R.id.discountCode);
-        String code = discountCode.getText().toString();
-        if(code.equalsIgnoreCase("Monday15")){
-            double orderTotal = Double.parseDouble(total);
-            double discountTotal = orderTotal - (orderTotal * 0.15);
-            String discountTotalString = String.valueOf(discountTotal);
-            checkoutTotal.setText(new StringBuilder("Total: €").append(discountTotalString));
-        } else {
-            checkoutTotal.setText(new StringBuilder("Total: €").append(total));
-        }
+
+        applyDiscount = findViewById(R.id.applyDiscount);
+
+        applyDiscount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String code = discountCode.getText().toString();
+                if(code.equalsIgnoreCase("Monday15")){
+                    double orderTotal = Double.parseDouble(total);
+                    double discount = orderTotal * 0.15;
+                    double discountedTotal = orderTotal - discount;
+                    double totalRounded = (double) Math.round(discountedTotal * 100) / 100;
+                    String discountedTotalString = String.valueOf(totalRounded);
+                    checkoutTotal.setText(new StringBuilder("Total: €").append(discountedTotalString));
+                } else {
+                    Toast.makeText(Checkout.this, "Invalid Discount Code", Toast.LENGTH_LONG).show();
+                    checkoutTotal.setText(new StringBuilder("Total: €").append(total));
+                }
+            }
+        });
+
 
         cardNumber = findViewById(R.id.checkoutCardNumber);
         cardExpiry = findViewById(R.id.checkoutCardExpiry);
