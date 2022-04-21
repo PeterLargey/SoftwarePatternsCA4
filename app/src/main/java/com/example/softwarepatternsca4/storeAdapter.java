@@ -83,7 +83,8 @@ public class storeAdapter extends RecyclerView.Adapter<storeAdapter.ItemViewHold
         holder.manufacturer.setText(new StringBuilder("Manufacturer: ").append(filteredItems.get(position).getManufacturer()).toString());
         holder.size.setText(new StringBuilder("Size: ").append(filteredItems.get(position).getSize()).toString());
         holder.price.setText(new StringBuilder("Price: ").append(filteredItems.get(position).getPrice()).toString());
-        if(filteredItems.get(position).getStockLevel() > 0){
+        int stockLevel = Integer.parseInt(filteredItems.get(position).getStock());
+        if(stockLevel > 0){
             stockAvailability = "Available";
         } else{
             stockAvailability = "Unavailable";

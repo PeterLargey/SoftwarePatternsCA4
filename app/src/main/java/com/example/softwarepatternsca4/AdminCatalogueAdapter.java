@@ -2,12 +2,14 @@ package com.example.softwarepatternsca4;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,7 +41,7 @@ public class AdminCatalogueAdapter extends RecyclerView.Adapter<AdminCatalogueAd
         holder.manufacturer.setText(filteredItems.get(position).getManufacturer());
         holder.size.setText(filteredItems.get(position).getSize());
         holder.price.setText(filteredItems.get(position).getPrice());
-        holder.stock.setText(filteredItems.get(position).getStockLevel());
+        holder.stock.setText(filteredItems.get(position).getStock());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,27 +70,46 @@ public class AdminCatalogueAdapter extends RecyclerView.Adapter<AdminCatalogueAd
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
-                if(charString.isEmpty()){
+                final FilterResults filterResults = new FilterResults();
+                ArrayList<Items> results = new ArrayList<>();
+                if(filteredItems == null){
                     filteredItems = items;
-                } else {
-                    ArrayList<Items> filteringItems = new ArrayList<>();
-                    for(Items i: items){
-                        if(i.getCategory().toLowerCase().contains(charString) || i.getName().toLowerCase().contains(charString) || i.getManufacturer().toLowerCase().contains(charString)){
-                            filteringItems.add(i);
+                }
+                if(!charString.isEmpty()){
+                    if(filteredItems != null && filteredItems.size() > 0){
+                        for(Items i: filteredItems){
+                            Log.d("TAG", "Item Name:" + i.getName());
+                            if(i.getCategory().toLowerCase().contains(charString) || i.getName().toLowerCase().contains(charString) || i.getManufacturer().toLowerCase().contains(charString)){
+                                results.add(i);
+                            }
                         }
                     }
-                    filteredItems = filteringItems;
+                    filterResults.values = results;
                 }
+//                if(charString.isEmpty()){
+//                    filteredItems = items;
+//                } else {
+//                    for(Items i: filteredItems){
+//                        Log.d("TAG", "Item Name:" + i.getName());
+//                        if(i.getCategory().toLowerCase().contains(charString) || i.getName().toLowerCase().contains(charString) || i.getManufacturer().toLowerCase().contains(charString)){
+//                            results.add(i);
+//                        }
+//                    }
+//                    filterResults.values = results;
+//                }
 
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = filteredItems;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                filteredItems = (ArrayList<Items>) filterResults.values;
-                notifyDataSetChanged();
+                if(filterResults.values == null){
+                    filteredItems = items;
+                    notifyDataSetChanged();
+                } else {
+                    filteredItems = (ArrayList<Items>) filterResults.values;
+                    notifyDataSetChanged();
+                }
             }
         };
     }

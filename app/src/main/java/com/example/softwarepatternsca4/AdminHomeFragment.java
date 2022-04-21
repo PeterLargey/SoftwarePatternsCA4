@@ -41,45 +41,40 @@ public class AdminHomeFragment extends Fragment {
 
         catalogue = adminHomeView.findViewById(R.id.adminCatalogueRecycler);
         catalogue.addItemDecoration(new DividerItemDecoration(adminHomeView.getContext(), DividerItemDecoration.VERTICAL));
-        getData();
 
         search = adminHomeView.findViewById(R.id.adminSearch);
+
+        db.collection("Catalogue").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    items = new ArrayList<>();
+                    for(DocumentSnapshot doc: task.getResult()){
+                        items.add(doc.toObject(Items.class));
+                    }
+                    setUpRecycler(items);
+
+                }
+            }
+        });
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(items.contains(query)){
-                    adapter.getFilter().filter(query);
-                } else {
-                    Toast.makeText(adminHomeView.getContext(), "No Match found",Toast.LENGTH_LONG).show();
-                }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                adapter.getFilter().filter(newText);
+                return true;
             }
         });
+
+
         return adminHomeView;
     }
 
-
-    private void getData(){
-        db.collection("Catalogue").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-               if(task.isSuccessful()){
-                   items = new ArrayList<>();
-                   for(DocumentSnapshot doc: task.getResult()){
-                       items.add(doc.toObject(Items.class));
-                   }
-                   setUpRecycler(items);
-
-               }
-            }
-        });
-    }
 
     private void setUpRecycler(ArrayList<Items> items){
         adapter = new AdminCatalogueAdapter(items);

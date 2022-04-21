@@ -1,5 +1,6 @@
 package com.example.softwarepatternsca4;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,6 +8,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -73,5 +76,21 @@ public class CustomerDetails extends AppCompatActivity {
         if(adapter != null){
             adapter.stopListening();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.back_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == R.id.back){
+            Intent i = new Intent(CustomerDetails.this, AdminMain.class);
+            startActivity(i);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

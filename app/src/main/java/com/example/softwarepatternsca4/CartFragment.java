@@ -34,7 +34,7 @@ public class CartFragment extends Fragment {
     private Button checkout;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private cartAdapter adapter;
-    private String email;
+    private String email, address;
     private ArrayList<Items> items;
 
     @Nullable
@@ -45,6 +45,7 @@ public class CartFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         if(getArguments() != null){
             email = getArguments().getString("email");
+            address = getArguments().getString("address");
         }
 
         cartRecycler = cartView.findViewById(R.id.cartRecycler);
@@ -65,9 +66,19 @@ public class CartFragment extends Fragment {
                                 items.add(doc.toObject(Items.class));
                             }
 
+                            double total = 0.00;
+                            for(Items s : items){
+                                double amount = Double.parseDouble(s.getPrice());
+                                total = total + amount;
+                            }
+
+                            String totalString = String.valueOf(total);
+
                             Intent i = new Intent(cartView.getContext(), Checkout.class);
                             i.putParcelableArrayListExtra("items", (ArrayList<Items>) items);
                             i.putExtra("email", email);
+                            i.putExtra("address", address);
+                            i.putExtra("total", totalString);
                             view.getContext().startActivity(i);
                         }
                     }

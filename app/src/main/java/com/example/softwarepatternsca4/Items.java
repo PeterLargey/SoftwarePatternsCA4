@@ -12,10 +12,10 @@ public class Items implements Parcelable {
     private String category;
     private String image;
     private String size;
-    private int stockLevel;
+    private String stock;
 
 
-    public Items(String id, String name, String manufacturer, String price, String category, String image, String size, int stockLevel) {
+    public Items(String id, String name, String manufacturer, String price, String category, String image, String size, String stock) {
         this.id = id;
         this.name = name;
         this.manufacturer = manufacturer;
@@ -23,7 +23,7 @@ public class Items implements Parcelable {
         this.category = category;
         this.image = image;
         this.size = size;
-        this.stockLevel = stockLevel;
+        this.stock = stock;
     }
 
     public Items(){}
@@ -36,7 +36,7 @@ public class Items implements Parcelable {
         category = in.readString();
         image = in.readString();
         size = in.readString();
-        stockLevel = in.readInt();
+        stock = in.readString();
     }
 
     public static final Creator<Items> CREATOR = new Creator<Items>() {
@@ -107,12 +107,12 @@ public class Items implements Parcelable {
         this.size = size;
     }
 
-    public int getStockLevel() {
-        return stockLevel;
+    public String getStock() {
+        return stock;
     }
 
-    public void setStockLevel(int stockLevel) {
-        this.stockLevel = stockLevel;
+    public void setStock(String stock) {
+        this.stock = stock;
     }
 
     @Override
@@ -129,6 +129,6 @@ public class Items implements Parcelable {
         parcel.writeString(category);
         parcel.writeString(image);
         parcel.writeString(size);
-        parcel.writeInt(stockLevel);
+        parcel.writeString(stock);
     }
 }

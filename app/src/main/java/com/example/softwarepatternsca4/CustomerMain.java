@@ -16,7 +16,7 @@ public class CustomerMain extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private NavigationBarView bottomNav;
-    private String email;
+    private String email, address;
     private Intent data;
 
     @Override
@@ -29,9 +29,11 @@ public class CustomerMain extends AppCompatActivity {
 
         data = getIntent();
         email = data.getStringExtra("email");
+        address = data.getStringExtra("address");
 
         Bundle bundle = new Bundle();
         bundle.putString("email", email);
+        bundle.putString("address", address);
 
         Fragment startingFragment = new StoreFragment();
         startingFragment.setArguments(bundle);

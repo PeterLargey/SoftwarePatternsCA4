@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SoftwarePatternsCA4">
         <activity
+            android:name=".CreateRating"
+            android:exported="true" />
+        <activity
+            android:name=".RatingDetails"
+            android:exported="true" />
+        <activity
             android:name=".Checkout"
             android:exported="true" />
         <activity

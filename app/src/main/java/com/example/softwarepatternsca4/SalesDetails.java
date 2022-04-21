@@ -60,6 +60,7 @@ public class SalesDetails extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.back_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
