@@ -43,10 +43,11 @@ public class Checkout extends AppCompatActivity {
     private RecyclerView checkoutRecycler;
     private checkoutAdapter adapter;
     private TextView checkoutTotal, checkoutAddress, checkoutEmail;
-    private EditText cardNumber, cardExpiry, cardCVV;
+    private EditText cardNumber, cardExpiry, cardCVV, discountCode;
     private Button pay;
     private final String TAG = "TAG";
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
+    private String docId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +66,20 @@ public class Checkout extends AppCompatActivity {
         checkoutAddress = findViewById(R.id.checkoutAddress);
         checkoutEmail = findViewById(R.id.checkoutEmail);
 
-        checkoutTotal.setText(total);
+        checkoutTotal.setText(new StringBuilder("Total: €").append(total));
         checkoutAddress.setText(address);
         checkoutEmail.setText(email);
+
+        discountCode = findViewById(R.id.discountCode);
+        String code = discountCode.getText().toString();
+        if(code.equalsIgnoreCase("Monday15")){
+            double orderTotal = Double.parseDouble(total);
+            double discountTotal = orderTotal - (orderTotal * 0.15);
+            String discountTotalString = String.valueOf(discountTotal);
+            checkoutTotal.setText(new StringBuilder("Total: €").append(discountTotalString));
+        } else {
+            checkoutTotal.setText(new StringBuilder("Total: €").append(total));
+        }
 
         cardNumber = findViewById(R.id.checkoutCardNumber);
         cardExpiry = findViewById(R.id.checkoutCardExpiry);
@@ -93,6 +105,7 @@ public class Checkout extends AppCompatActivity {
                     LocalDate now = LocalDate.now();
                     String date = String.valueOf(now);
                     inputDataIntoSales(items, checkoutTotal.getText().toString(), checkoutEmail.getText().toString(), date);
+                    updateStockLevel(items);
                     clearCart();
                     Toast.makeText(getApplicationContext(), "Sale Complete", Toast.LENGTH_LONG).show();
                     Intent i = new Intent(Checkout.this, CustomerMain.class);
@@ -103,6 +116,53 @@ public class Checkout extends AppCompatActivity {
         });
 
 
+    }
+
+    private void updateStockLevel(ArrayList<Items> items) {
+
+        for(Items i : items){
+            String itemId = i.getId();
+            db.collection("Catalogue").whereEqualTo("id", itemId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot doc: task.getResult()){
+                            docId = doc.getId();
+                        }
+                        int stock = Integer.parseInt(i.getStock());
+                        int adjustedStock = stock - 1;
+                        String newStock = String.valueOf(adjustedStock);
+
+                        String price = i.getPrice();
+                        String[] priceSplit = price.split("€");
+
+                        DocumentReference docRef = db.collection("Catalogue").document(docId);
+                        Map<String, Object> update = new HashMap<>();
+                        update.put("category", i.getCategory());
+                        update.put("id", itemId);
+                        update.put("image", i.getImage());
+                        update.put("manufacturer", i.getManufacturer());
+                        update.put("name", i.getName());
+                        update.put("price", priceSplit[1]);
+                        update.put("size", i.getSize());
+                        update.put("stock", newStock);
+
+                        docRef.set(update).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d(TAG, "Stock level adjusted");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "Failed: Stock level was not adjusted");
+                            }
+                        });
+
+                    }
+                }
+            });
+        }
     }
 
     private void clearCart() {

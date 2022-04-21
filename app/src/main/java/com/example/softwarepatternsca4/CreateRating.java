@@ -41,7 +41,7 @@ public class CreateRating extends AppCompatActivity {
 
         data = getIntent();
 
-        id = data.getStringExtra("id");
+        id = data.getStringExtra("itemId");
         name = data.getStringExtra("name");
         category = data.getStringExtra("category");
         manufacturer = data.getStringExtra("manufacturer");

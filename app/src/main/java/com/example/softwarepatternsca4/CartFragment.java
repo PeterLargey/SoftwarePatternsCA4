@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class CartFragment extends Fragment {
     private cartAdapter adapter;
     private String email, address;
     private ArrayList<Items> items;
+    private final String TAG = "TAG";
 
     @Nullable
     @Override
@@ -68,7 +70,9 @@ public class CartFragment extends Fragment {
 
                             double total = 0.00;
                             for(Items s : items){
-                                double amount = Double.parseDouble(s.getPrice());
+                                String[] priceSplit = s.getPrice().split("€");
+                                Log.d(TAG, "Item Price: " + priceSplit[1]);
+                                double amount = Double.parseDouble(priceSplit[1]);
                                 total = total + amount;
                             }
 

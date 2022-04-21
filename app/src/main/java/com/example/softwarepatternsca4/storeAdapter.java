@@ -1,5 +1,6 @@
 package com.example.softwarepatternsca4;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,27 +40,34 @@ public class storeAdapter extends RecyclerView.Adapter<storeAdapter.ItemViewHold
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
-                if(charString.isEmpty()){
+                final FilterResults filterResults = new FilterResults();
+                ArrayList<Items> results = new ArrayList<>();
+                if(filteredItems == null){
                     filteredItems = items;
-                } else {
-                    ArrayList<Items> filteringItems = new ArrayList<>();
-                    for(Items i: items){
-                        if(i.getCategory().toLowerCase().contains(charString) || i.getName().toLowerCase().contains(charString) || i.getManufacturer().toLowerCase().contains(charString)){
-                            filteringItems.add(i);
+                }
+                if(!charString.isEmpty()){
+                    if(filteredItems != null && filteredItems.size() > 0){
+                        for(Items i : filteredItems){
+                            Log.d("TAG", "Item Name:" + i.getName());
+                            if(i.getCategory().toLowerCase().contains(charString) || i.getName().toLowerCase().contains(charString) || i.getManufacturer().toLowerCase().contains(charString)){
+                                results.add(i);
+                            }
                         }
                     }
-                    filteredItems = filteringItems;
+                    filterResults.values = results;
                 }
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = filteredItems;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                filteredItems = (ArrayList<Items>) filterResults.values;
-                notifyDataSetChanged();
+                if(filterResults.values == null){
+                    filteredItems = items;
+                    notifyDataSetChanged();
+                } else {
+                    filteredItems = (ArrayList<Items>) filterResults.values;
+                    notifyDataSetChanged();
+                }
             }
         };
     }
@@ -78,11 +86,14 @@ public class storeAdapter extends RecyclerView.Adapter<storeAdapter.ItemViewHold
 
         ImageView addButton = holder.itemView.findViewById(R.id.addButton);
 
+        String id = filteredItems.get(position).getId();
+        String stock = filteredItems.get(position).getStock();
+
         holder.name.setText(filteredItems.get(position).getName());
         holder.category.setText(new StringBuilder("Category: ").append(filteredItems.get(position).getCategory()).toString());
         holder.manufacturer.setText(new StringBuilder("Manufacturer: ").append(filteredItems.get(position).getManufacturer()).toString());
         holder.size.setText(new StringBuilder("Size: ").append(filteredItems.get(position).getSize()).toString());
-        holder.price.setText(new StringBuilder("Price: ").append(filteredItems.get(position).getPrice()).toString());
+        holder.price.setText(new StringBuilder("Price: €").append(filteredItems.get(position).getPrice()).toString());
         int stockLevel = Integer.parseInt(filteredItems.get(position).getStock());
         if(stockLevel > 0){
             stockAvailability = "Available";
@@ -95,14 +106,24 @@ public class storeAdapter extends RecyclerView.Adapter<storeAdapter.ItemViewHold
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String category = holder.category.getText().toString();
+                String manufacturer = holder.manufacturer.getText().toString();
+                String size = holder.size.getText().toString();
+                String price = holder.price.getText().toString();
+                String[] categorySplit = category.split(": ");
+                String[] manufacturerSplit = manufacturer.split(": ");
+                String[] sizeSplit = size.split(": ");
+                String[] priceSplit = price.split(": ");
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 DocumentReference docRef = db.collection("Cart").document();
                 Map<String, Object> add = new HashMap<>();
                 add.put("name", holder.name.getText().toString());
-                add.put("category", holder.category.getText().toString());
-                add.put("manufacturer", holder.manufacturer.getText().toString());
-                add.put("size", holder.size.getText().toString());
-                add.put("price", holder.price.getText().toString());
+                add.put("category", categorySplit[1]);
+                add.put("manufacturer", manufacturerSplit[1]);
+                add.put("size", sizeSplit[1]);
+                add.put("price", priceSplit[1]);
+                add.put("id", id);
+                add.put("stock", stock);
 
                 docRef.set(add).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

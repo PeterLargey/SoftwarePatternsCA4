@@ -27,9 +27,9 @@ public class checkoutAdapter extends RecyclerView.Adapter<checkoutAdapter.Checko
 
     @Override
     public void onBindViewHolder(@NonNull CheckoutViewHolder holder, int position) {
-        holder.name.setText(items.get(position).getName());
-        holder.size.setText(items.get(position).getSize());
-        holder.price.setText(items.get(position).getPrice());
+        holder.name.setText(new StringBuilder("Name: ").append(items.get(position).getName()));
+        holder.size.setText(new StringBuilder("Size: ").append(items.get(position).getSize()));
+        holder.price.setText(new StringBuilder("Price: ").append(items.get(position).getPrice()));
     }
 
     @Override

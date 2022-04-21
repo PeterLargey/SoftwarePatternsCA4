@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class StoreFragment extends Fragment {
 
     private FirebaseFirestore db;
-    private storeAdapter storeAdapter;
+    private storeAdapter adapter;
     private RecyclerView storeCatalogue;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private ArrayList<Items> items;
@@ -44,6 +44,8 @@ public class StoreFragment extends Fragment {
         storeCatalogue = storeView.findViewById(R.id.catalogueRecycler);
         storeCatalogue.addItemDecoration(new DividerItemDecoration(storeView.getContext(), DividerItemDecoration.VERTICAL));
 
+        search = storeView.findViewById(R.id.customerSearch);
+
         db.collection("Catalogue").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -58,22 +60,17 @@ public class StoreFragment extends Fragment {
             }
         });
 
-        search = storeView.findViewById(R.id.customerSearch);
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(items.contains(query)){
-                    storeAdapter.getFilter().filter(query);
-                }else {
-                    Toast.makeText(storeView.getContext(), "No Match found",Toast.LENGTH_LONG).show();
-                }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                adapter.getFilter().filter(newText);
+                return true;
             }
         });
 
@@ -81,9 +78,9 @@ public class StoreFragment extends Fragment {
     }
 
     private void setUpRecycler(ArrayList<Items> items) {
-        storeAdapter = new storeAdapter(items);
+        adapter = new storeAdapter(items);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         storeCatalogue.setLayoutManager(staggeredGridLayoutManager);
-        storeCatalogue.setAdapter(storeAdapter);
+        storeCatalogue.setAdapter(adapter);
     }
 }

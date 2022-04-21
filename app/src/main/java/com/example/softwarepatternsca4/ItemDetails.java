@@ -44,12 +44,15 @@ public class ItemDetails extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         data = getIntent();
         id = data.getStringExtra("id");
+        Log.d(TAG, "Item Id: " + id);
         name = data.getStringExtra("name");
         category = data.getStringExtra("category");
         manufacturer = data.getStringExtra("manufacturer");
         size = data.getStringExtra("size");
         price = data.getStringExtra("price");
         stock = data.getStringExtra("stock");
+
+        String[] priceSplit = price.split("€");
 
         itemName = findViewById(R.id.itemName);
         itemCategory = findViewById(R.id.itemCategory);
@@ -62,7 +65,7 @@ public class ItemDetails extends AppCompatActivity {
         itemCategory.setText(category);
         itemManufacturer.setText(manufacturer);
         itemSize.setText(size);
-        itemPrice.setText(price);
+        itemPrice.setText(priceSplit[1]);
         itemStock.setText(stock);
 
 
@@ -86,10 +89,32 @@ public class ItemDetails extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 for(QueryDocumentSnapshot doc : task.getResult()){
                                     docId = doc.getId();
-                                    Log.d(TAG, "Document ID: " + docId);
                                 }
+                                Log.d(TAG, "Document ID: " + docId);
 
-                                updateCatalogueItem(docId, id, nameString, categoryString, manufacturerString, sizeString, priceString, stockString);
+                                DocumentReference docRef = db.collection("Catalogue").document(docId);
+                                Map<String, Object> update = new HashMap<>();
+                                update.put("id", id);
+                                update.put("name", nameString);
+                                update.put("category", categoryString);
+                                update.put("manufacturer", manufacturerString);
+                                update.put("size", sizeString);
+                                update.put("price", priceString);
+                                update.put("stock", stockString);
+                                docRef.set(update).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(getApplicationContext(), "Item Updated Successfully", Toast.LENGTH_LONG).show();
+                                        Intent i = new Intent(ItemDetails.this, AdminMain.class);
+                                        startActivity(i);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getApplicationContext(), "Update Failed", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
                             }
                         }
                     });
@@ -99,31 +124,6 @@ public class ItemDetails extends AppCompatActivity {
         });
 
 
-    }
-
-    private void updateCatalogueItem(String docId, String id, String nameString, String categoryString, String manufacturerString, String sizeString, String priceString, String stockString) {
-        DocumentReference docRef = db.collection("Catalogue").document(docId);
-        Map<String, Object> update = new HashMap<>();
-        update.put("id", id);
-        update.put("name", nameString);
-        update.put("category", categoryString);
-        update.put("manufacturer", manufacturerString);
-        update.put("size", sizeString);
-        update.put("price", priceString);
-        update.put("stock", stockString);
-        docRef.set(update).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(getApplicationContext(), "Item Updated Successfully", Toast.LENGTH_LONG).show();
-                Intent i = new Intent(ItemDetails.this, AdminMain.class);
-                startActivity(i);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Update Failed", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     @Override

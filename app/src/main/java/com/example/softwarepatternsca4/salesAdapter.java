@@ -28,7 +28,7 @@ public class salesAdapter extends FirestoreRecyclerAdapter<Sales, salesAdapter.S
     @Override
     protected void onBindViewHolder(@NonNull SalesViewHolder holder, int position, @NonNull Sales model) {
         holder.date.setText(model.getDate());
-        holder.total.setText("€" + model.getTotal());
+        holder.total.setText(model.getTotal());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

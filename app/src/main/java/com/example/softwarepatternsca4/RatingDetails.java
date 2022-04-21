@@ -54,11 +54,11 @@ public class RatingDetails extends AppCompatActivity {
         itemSize = findViewById(R.id.ratingDetailSize);
         itemPrice = findViewById(R.id.ratingDetailPrice);
 
-        itemName.setText(new StringBuilder("Name").append(name));
+        itemName.setText(new StringBuilder("Name: ").append(name));
         itemCategory.setText(new StringBuilder("Category: ").append(category));
         itemManufacturer.setText(new StringBuilder("Manufacturer: ").append(manufacturer));
         itemSize.setText(new StringBuilder("Size: ").append(size));
-        itemPrice.setText(new StringBuilder("Price: ").append(price));
+        itemPrice.setText(new StringBuilder("Price: €").append(price));
 
         itemRatingRecycler = findViewById(R.id.itemRatingRecycler);
         itemRatingRecycler.addItemDecoration(new DividerItemDecoration(RatingDetails.this, DividerItemDecoration.VERTICAL));

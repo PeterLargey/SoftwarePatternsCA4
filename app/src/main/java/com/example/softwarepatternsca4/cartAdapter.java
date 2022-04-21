@@ -28,8 +28,8 @@ public class cartAdapter extends FirestoreRecyclerAdapter<Items, cartAdapter.Car
         ImageView deleteButton = holder.itemView.findViewById(R.id.deleteCartItem);
 
         holder.name.setText(model.getName());
-        holder.size.setText(model.getSize());
-        holder.price.setText(model.getPrice());
+        holder.size.setText(new StringBuilder("Size: ").append(model.getSize()));
+        holder.price.setText(new StringBuilder("Price: ").append(model.getPrice()));
 
         String docId = getSnapshots().getSnapshot(position).getId();
 
