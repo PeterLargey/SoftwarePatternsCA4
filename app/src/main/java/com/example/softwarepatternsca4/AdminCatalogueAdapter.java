@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AdminCatalogueAdapter extends RecyclerView.Adapter<AdminCatalogueAdapter.AdminViewHolder> implements Filterable {
 
@@ -34,10 +36,12 @@ public class AdminCatalogueAdapter extends RecyclerView.Adapter<AdminCatalogueAd
     private ArrayList<Items> filteredItems;
     private String docId;
     private AlertDialog.Builder builder;
+    private Button sort;
 
-    public AdminCatalogueAdapter(ArrayList<Items> items){
+    public AdminCatalogueAdapter(ArrayList<Items> items, Button sort){
         this.items = items;
         this.filteredItems = items;
+        this.sort = sort;
     }
 
     @NonNull
@@ -53,6 +57,7 @@ public class AdminCatalogueAdapter extends RecyclerView.Adapter<AdminCatalogueAd
         ImageView deleteButton = holder.itemView.findViewById(R.id.deleteCatalogueItem);
 
         String id = filteredItems.get(position).getId();
+        String image = filteredItems.get(position).getImage();
 
         holder.id.setText(new StringBuilder("ID: ").append(filteredItems.get(position).getId()));
         holder.name.setText(filteredItems.get(position).getName());
@@ -73,6 +78,7 @@ public class AdminCatalogueAdapter extends RecyclerView.Adapter<AdminCatalogueAd
                 i.putExtra("size", holder.size.getText().toString());
                 i.putExtra("price", holder.price.getText().toString());
                 i.putExtra("stock", holder.stock.getText().toString());
+                i.putExtra("image", image);
                 view.getContext().startActivity(i);
             }
         });
@@ -167,6 +173,34 @@ public class AdminCatalogueAdapter extends RecyclerView.Adapter<AdminCatalogueAd
                     filteredItems = (ArrayList<Items>) filterResults.values;
                     notifyDataSetChanged();
                 }
+
+                sort.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        builder = new AlertDialog.Builder(view.getContext());
+                        builder.setMessage("Choose how you want to sort the list").setCancelable(false)
+                                .setPositiveButton("Ascending", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Collections.sort(filteredItems, Items.NameAscendingComparator);
+                                        notifyDataSetChanged();
+                                    }
+                                }).setNegativeButton("Descending", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Collections.sort(filteredItems, Items.NameDescendingComparator);
+                                notifyDataSetChanged();
+                            }
+                        }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                    }
+                });
             }
         };
     }

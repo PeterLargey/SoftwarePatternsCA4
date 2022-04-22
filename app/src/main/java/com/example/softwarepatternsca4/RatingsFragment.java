@@ -1,5 +1,6 @@
 package com.example.softwarepatternsca4;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -40,15 +41,15 @@ public class RatingsFragment extends Fragment {
         ratingRecycler = ratingsView.findViewById(R.id.ratingsRecycler);
         ratingRecycler.addItemDecoration(new DividerItemDecoration(ratingsView.getContext(), DividerItemDecoration.VERTICAL));
 
-        setUpRecycler(email, address);
+        setUpRecycler(email, address, ratingsView.getContext());
 
         return ratingsView;
     }
 
-    private void setUpRecycler(String email, String address) {
+    private void setUpRecycler(String email, String address, Context context) {
         Query query = db.collection("Catalogue").orderBy("name", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Items> options = new FirestoreRecyclerOptions.Builder<Items>().setQuery(query, Items.class).build();
-        adapter = new ratingAdapter(options, email, address);
+        adapter = new ratingAdapter(options, email, address, context);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         ratingRecycler.setLayoutManager(staggeredGridLayoutManager);
         ratingRecycler.setAdapter(adapter);

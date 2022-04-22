@@ -12,8 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,12 +25,13 @@ public class RatingDetails extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private Intent data;
-    private String name, category, manufacturer, size, price, id, email, address;
+    private String name, category, manufacturer, size, price, id, email, address, image;
     private RecyclerView itemRatingRecycler;
     private itemRatingAdapter adapter;
     private TextView itemName, itemCategory, itemManufacturer, itemSize, itemPrice;
     private Button createReview;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
+    private ImageView itemImage;
 
 
     @Override
@@ -47,7 +50,9 @@ public class RatingDetails extends AppCompatActivity {
         price = data.getStringExtra("price");
         email = data.getStringExtra("email");
         address = data.getStringExtra("address");
+        image = data.getStringExtra("image");
 
+        itemImage = findViewById(R.id.ratingDetailImage);
         itemName = findViewById(R.id.ratingDetailName);
         itemCategory = findViewById(R.id.ratingDetailCategory);
         itemManufacturer = findViewById(R.id.ratingDetailManufacturer);
@@ -59,6 +64,8 @@ public class RatingDetails extends AppCompatActivity {
         itemManufacturer.setText(new StringBuilder("Manufacturer: ").append(manufacturer));
         itemSize.setText(new StringBuilder("Size: ").append(size));
         itemPrice.setText(new StringBuilder("Price: €").append(price));
+
+        Glide.with(RatingDetails.this).load(image).into(itemImage);
 
         itemRatingRecycler = findViewById(R.id.itemRatingRecycler);
         itemRatingRecycler.addItemDecoration(new DividerItemDecoration(RatingDetails.this, DividerItemDecoration.VERTICAL));
@@ -78,6 +85,7 @@ public class RatingDetails extends AppCompatActivity {
                 i.putExtra("price", price);
                 i.putExtra("email", email);
                 i.putExtra("address", address);
+                i.putExtra("image", image);
                 startActivity(i);
             }
         });

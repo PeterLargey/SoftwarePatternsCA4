@@ -1,9 +1,14 @@
 package com.example.softwarepatternsca4;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -13,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +27,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,10 +35,15 @@ public class storeAdapter extends RecyclerView.Adapter<storeAdapter.ItemViewHold
 
     private ArrayList<Items> items;
     private ArrayList<Items> filteredItems;
+    private Button sort;
+    private AlertDialog.Builder builder;
+    private Context context;
 
-    public storeAdapter(ArrayList<Items> items){
+    public storeAdapter(ArrayList<Items> items, Button sort, Context context){
         this.items = items;
         this.filteredItems = items;
+        this.sort = sort;
+        this.context = context;
     }
 
     @Override
@@ -68,6 +80,33 @@ public class storeAdapter extends RecyclerView.Adapter<storeAdapter.ItemViewHold
                     filteredItems = (ArrayList<Items>) filterResults.values;
                     notifyDataSetChanged();
                 }
+                sort.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        builder = new AlertDialog.Builder(view.getContext());
+                        builder.setMessage("Choose how you want to sort the list").setCancelable(false)
+                                .setPositiveButton("Ascending", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Collections.sort(filteredItems, Items.NameAscendingComparator);
+                                        notifyDataSetChanged();
+                                    }
+                                }).setNegativeButton("Descending", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Collections.sort(filteredItems, Items.NameDescendingComparator);
+                                notifyDataSetChanged();
+                            }
+                        }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                    }
+                });
             }
         };
     }
@@ -88,6 +127,7 @@ public class storeAdapter extends RecyclerView.Adapter<storeAdapter.ItemViewHold
 
         String id = filteredItems.get(position).getId();
         String stock = filteredItems.get(position).getStock();
+        String itemImage = filteredItems.get(position).getImage();
 
         holder.name.setText(filteredItems.get(position).getName());
         holder.category.setText(new StringBuilder("Category: ").append(filteredItems.get(position).getCategory()).toString());
@@ -102,6 +142,8 @@ public class storeAdapter extends RecyclerView.Adapter<storeAdapter.ItemViewHold
             addButton.setEnabled(false);
         }
         holder.status.setText(new StringBuilder("Status: ").append(stockAvailability).toString());
+
+        Glide.with(this.context).load(filteredItems.get(position).getImage()).into(holder.image);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +166,7 @@ public class storeAdapter extends RecyclerView.Adapter<storeAdapter.ItemViewHold
                 add.put("price", priceSplit[1]);
                 add.put("id", id);
                 add.put("stock", stock);
+                add.put("image", itemImage);
 
                 docRef.set(add).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

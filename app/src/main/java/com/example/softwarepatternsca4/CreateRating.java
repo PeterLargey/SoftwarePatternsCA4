@@ -26,7 +26,7 @@ public class CreateRating extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private Intent data;
-    private String id, email, name, category, manufacturer, size, price, address;
+    private String id, email, name, category, manufacturer, size, price, address, image;
     private EditText comment;
     private RatingBar rating;
     private Button submitRating;
@@ -49,6 +49,7 @@ public class CreateRating extends AppCompatActivity {
         price = data.getStringExtra("price");
         email = data.getStringExtra("email");
         address = data.getStringExtra("address");
+        image = data.getStringExtra("image");
 
         comment = findViewById(R.id.ratingComment);
         rating = findViewById(R.id.ratingBar);
@@ -74,6 +75,7 @@ public class CreateRating extends AppCompatActivity {
                     i.putExtra("price", price);
                     i.putExtra("email", email);
                     i.putExtra("address", address);
+                    i.putExtra("image", image);
                     startActivity(i);
                 }
             }
@@ -120,6 +122,7 @@ public class CreateRating extends AppCompatActivity {
             i.putExtra("price", price);
             i.putExtra("email", email);
             i.putExtra("address", address);
+            i.putExtra("image", image);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

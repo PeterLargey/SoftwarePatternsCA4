@@ -1,14 +1,17 @@
 package com.example.softwarepatternsca4;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
@@ -16,11 +19,13 @@ public class ratingAdapter extends FirestoreRecyclerAdapter<Items, ratingAdapter
 
     private String email;
     private String address;
+    private Context context;
 
-    public ratingAdapter(@NonNull FirestoreRecyclerOptions<Items> options, String email, String address) {
+    public ratingAdapter(@NonNull FirestoreRecyclerOptions<Items> options, String email, String address, Context context) {
         super(options);
         this.email = email;
         this.address = address;
+        this.context = context;
     }
 
     @Override
@@ -31,6 +36,8 @@ public class ratingAdapter extends FirestoreRecyclerAdapter<Items, ratingAdapter
         holder.manufacturer.setText(new StringBuilder("Manufacturer: ").append(model.getManufacturer()));
         holder.size.setText(new StringBuilder("Size: ").append(model.getSize()));
         holder.price.setText(new StringBuilder("Price: ").append(model.getPrice()));
+
+        Glide.with(this.context).load(model.getImage()).into(holder.image);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +51,7 @@ public class ratingAdapter extends FirestoreRecyclerAdapter<Items, ratingAdapter
                 i.putExtra("price", model.getPrice());
                 i.putExtra("email", email);
                 i.putExtra("address", address);
+                i.putExtra("image", model.getImage());
 
                 view.getContext().startActivity(i);
             }
@@ -64,8 +72,11 @@ public class ratingAdapter extends FirestoreRecyclerAdapter<Items, ratingAdapter
         private TextView manufacturer;
         private TextView size;
         private TextView price;
+        private ImageView image;
+
         public RatingViewHolder(@NonNull View itemView) {
             super(itemView);
+            image = itemView.findViewById(R.id.ratingCatalogueImage);
             name = itemView.findViewById(R.id.ratingsCatalogueName);
             category = itemView.findViewById(R.id.ratingsCatalogueCategory);
             manufacturer = itemView.findViewById(R.id.ratingsCatalogueManufacturer);

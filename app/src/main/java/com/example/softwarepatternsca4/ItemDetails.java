@@ -29,8 +29,8 @@ import java.util.Map;
 public class ItemDetails extends AppCompatActivity {
 
     private Intent data;
-    private String id, name, category, manufacturer, size, price, stock;
-    private EditText itemName, itemCategory, itemManufacturer, itemSize, itemPrice, itemStock;
+    private String id, name, category, manufacturer, size, price, stock, image;
+    private EditText itemName, itemCategory, itemManufacturer, itemSize, itemPrice, itemStock, itemImage;
     private Button update;
     private FirebaseFirestore db;
     private String docId;
@@ -51,6 +51,7 @@ public class ItemDetails extends AppCompatActivity {
         size = data.getStringExtra("size");
         price = data.getStringExtra("price");
         stock = data.getStringExtra("stock");
+        image = data.getStringExtra("image");
 
         String[] priceSplit = price.split("€");
 
@@ -60,6 +61,7 @@ public class ItemDetails extends AppCompatActivity {
         itemSize = findViewById(R.id.itemSize);
         itemPrice = findViewById(R.id.itemPrice);
         itemStock = findViewById(R.id.itemStock);
+        itemImage = findViewById(R.id.itemImageURL);
 
         itemName.setText(name);
         itemCategory.setText(category);
@@ -67,6 +69,7 @@ public class ItemDetails extends AppCompatActivity {
         itemSize.setText(size);
         itemPrice.setText(priceSplit[1]);
         itemStock.setText(stock);
+        itemImage.setText(image);
 
 
         update = findViewById(R.id.updateItem);
@@ -80,7 +83,8 @@ public class ItemDetails extends AppCompatActivity {
                 String sizeString = itemSize.getText().toString();
                 String priceString = itemPrice.getText().toString();
                 String stockString = itemStock.getText().toString();
-                if(nameString.isEmpty() || categoryString.isEmpty() || manufacturerString.isEmpty() || sizeString.isEmpty() || priceString.isEmpty() || stockString.isEmpty()){
+                String imageString = itemImage.getText().toString();
+                if(nameString.isEmpty() || categoryString.isEmpty() || manufacturerString.isEmpty() || sizeString.isEmpty() || priceString.isEmpty() || stockString.isEmpty() || imageString.isEmpty()){
                     Toast.makeText(getApplicationContext(), "All Fields Required", Toast.LENGTH_LONG).show();
                 } else {
                     db.collection("Catalogue").whereEqualTo("id", id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -101,6 +105,7 @@ public class ItemDetails extends AppCompatActivity {
                                 update.put("size", sizeString);
                                 update.put("price", priceString);
                                 update.put("stock", stockString);
+                                update.put("image", imageString);
                                 docRef.set(update).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {

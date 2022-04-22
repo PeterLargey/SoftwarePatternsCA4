@@ -3,6 +3,8 @@ package com.example.softwarepatternsca4;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Comparator;
+
 public class Items implements Parcelable {
 
     private String id;
@@ -27,6 +29,20 @@ public class Items implements Parcelable {
     }
 
     public Items(){}
+
+    public static Comparator<Items> NameAscendingComparator = new Comparator<Items>() {
+        @Override
+        public int compare(Items item1, Items item2) {
+            return item1.getName().compareTo(item2.getName());
+        }
+    };
+
+    public static Comparator<Items> NameDescendingComparator = new Comparator<Items>() {
+        @Override
+        public int compare(Items item1, Items item2) {
+            return item2.getName().compareTo(item1.getName());
+        }
+    };
 
     protected Items(Parcel in) {
         id = in.readString();

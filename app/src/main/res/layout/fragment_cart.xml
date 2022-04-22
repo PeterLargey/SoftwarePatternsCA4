@@ -7,7 +7,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -32,8 +32,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="60dp"
-                android:scrollbars="none"
+                android:scrollbars="vertical"
                 android:id="@+id/cartRecycler">
 
             </androidx.recyclerview.widget.RecyclerView>
@@ -43,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:text="Proceed to Checkout"
                 android:textSize="16sp"
+                android:layout_marginTop="60dp"
                 android:textColor="@color/white"
                 android:id="@+id/checkout"/>
 

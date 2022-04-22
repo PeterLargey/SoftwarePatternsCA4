@@ -29,17 +29,34 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/adminSearch"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_gravity="center"
-                app:queryHint="Search Here"
-                app:iconifiedByDefault="false"/>
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/adminSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:queryHint="Search Here"
+                    app:iconifiedByDefault="false"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:text="Sort"
+                    android:id="@+id/sortAdminCatalogue"
+                    android:layout_weight="0"/>
+
+            </LinearLayout>
+
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"

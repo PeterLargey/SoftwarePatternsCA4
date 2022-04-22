@@ -1,5 +1,6 @@
 package com.example.softwarepatternsca4;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -52,7 +53,7 @@ public class CartFragment extends Fragment {
 
         cartRecycler = cartView.findViewById(R.id.cartRecycler);
         cartRecycler.addItemDecoration(new DividerItemDecoration(cartView.getContext(), DividerItemDecoration.VERTICAL));
-        setUpRecycler();
+        setUpRecycler(cartView.getContext());
 
         checkout = cartView.findViewById(R.id.checkout);
 
@@ -93,10 +94,10 @@ public class CartFragment extends Fragment {
         return cartView;
     }
 
-    private void setUpRecycler() {
+    private void setUpRecycler(Context context) {
         Query query = db.collection("Cart").orderBy("name", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Items> options = new FirestoreRecyclerOptions.Builder<Items>().setQuery(query, Items.class).build();
-        adapter = new cartAdapter(options);
+        adapter = new cartAdapter(options, context);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         cartRecycler.setLayoutManager(staggeredGridLayoutManager);
         cartRecycler.setAdapter(adapter);

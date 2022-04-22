@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ public class Checkout extends AppCompatActivity {
     private Button pay;
     private final String TAG = "TAG";
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
-    private String docId;
+    private String docId, itemStock;
     private Button applyDiscount;
 
     @Override
@@ -100,7 +101,7 @@ public class Checkout extends AppCompatActivity {
 
         checkoutRecycler = findViewById(R.id.checkoutRecycler);
         checkoutRecycler.addItemDecoration(new DividerItemDecoration(Checkout.this, DividerItemDecoration.VERTICAL));
-        setUpRecycler(items);
+        setUpRecycler(items, Checkout.this);
 
         pay = findViewById(R.id.pay);
 
@@ -141,8 +142,11 @@ public class Checkout extends AppCompatActivity {
                     if(task.isSuccessful()){
                         for(QueryDocumentSnapshot doc: task.getResult()){
                             docId = doc.getId();
+                            Map<String, Object> docData = doc.getData();
+                            itemStock = (String) docData.get("stock");
+
                         }
-                        int stock = Integer.parseInt(i.getStock());
+                        int stock = Integer.parseInt(itemStock);
                         int adjustedStock = stock - 1;
                         String newStock = String.valueOf(adjustedStock);
 
@@ -225,8 +229,8 @@ public class Checkout extends AppCompatActivity {
         });
     }
 
-    private void setUpRecycler(ArrayList<Items> itemList) {
-        adapter = new checkoutAdapter(itemList);
+    private void setUpRecycler(ArrayList<Items> itemList, Context context) {
+        adapter = new checkoutAdapter(itemList, context);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         checkoutRecycler.setLayoutManager(staggeredGridLayoutManager);
         checkoutRecycler.setAdapter(adapter);
