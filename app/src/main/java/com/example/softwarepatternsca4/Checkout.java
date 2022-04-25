@@ -32,6 +32,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class Checkout extends AppCompatActivity {
@@ -134,8 +135,33 @@ public class Checkout extends AppCompatActivity {
 
     private void updateStockLevel(ArrayList<Items> items) {
 
-        for(Items i : items){
-            String itemId = i.getId();
+        ArrayList<StockItem> stockItems = new ArrayList<>();
+
+
+        for(Items i: items){
+            if(stockItems.isEmpty()){
+                StockItem item = new StockItem(i.getId(), "1");
+                stockItems.add(item);
+            } else {
+                for(StockItem s: stockItems){
+                    if(i.getId().equalsIgnoreCase(s.getId())){
+                        int amount = Integer.parseInt(s.getAmount());
+                        amount = amount + 1;
+                        s.setAmount(String.valueOf(amount));
+                    } else {
+                        StockItem newItem = new StockItem(i.getId(), "1");
+                        stockItems.add(newItem);
+                    }
+                }
+            }
+
+        }
+
+        for(StockItem h : stockItems){
+            Log.d(TAG, "Stock Items: " + h.getId() + " " + h.getAmount());
+            String itemId = h.getId();
+            int itemAmount = Integer.parseInt(h.getAmount());
+
             db.collection("Catalogue").whereEqualTo("id", itemId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -146,25 +172,13 @@ public class Checkout extends AppCompatActivity {
                             itemStock = (String) docData.get("stock");
 
                         }
+
                         int stock = Integer.parseInt(itemStock);
-                        int adjustedStock = stock - 1;
+                        int adjustedStock = stock - itemAmount;
                         String newStock = String.valueOf(adjustedStock);
 
-                        String price = i.getPrice();
-                        String[] priceSplit = price.split("€");
-
                         DocumentReference docRef = db.collection("Catalogue").document(docId);
-                        Map<String, Object> update = new HashMap<>();
-                        update.put("category", i.getCategory());
-                        update.put("id", itemId);
-                        update.put("image", i.getImage());
-                        update.put("manufacturer", i.getManufacturer());
-                        update.put("name", i.getName());
-                        update.put("price", priceSplit[1]);
-                        update.put("size", i.getSize());
-                        update.put("stock", newStock);
-
-                        docRef.set(update).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        docRef.update("stock", newStock).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
                                 Log.d(TAG, "Stock level adjusted");

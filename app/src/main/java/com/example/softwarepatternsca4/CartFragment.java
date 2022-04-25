@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,6 +34,7 @@ public class CartFragment extends Fragment {
 
     private FirebaseFirestore db;
     private RecyclerView cartRecycler;
+    private TextView emptyMessage;
     private Button checkout;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private cartAdapter adapter;
@@ -51,6 +53,7 @@ public class CartFragment extends Fragment {
             address = getArguments().getString("address");
         }
 
+        emptyMessage = cartView.findViewById(R.id.cartEmptyMessage);
         cartRecycler = cartView.findViewById(R.id.cartRecycler);
         cartRecycler.addItemDecoration(new DividerItemDecoration(cartView.getContext(), DividerItemDecoration.VERTICAL));
         setUpRecycler(cartView.getContext());
@@ -96,6 +99,16 @@ public class CartFragment extends Fragment {
 
     private void setUpRecycler(Context context) {
         Query query = db.collection("Cart").orderBy("name", Query.Direction.ASCENDING);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    if(task.getResult().isEmpty()){
+                        emptyMessage.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
         FirestoreRecyclerOptions<Items> options = new FirestoreRecyclerOptions.Builder<Items>().setQuery(query, Items.class).build();
         adapter = new cartAdapter(options, context);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);

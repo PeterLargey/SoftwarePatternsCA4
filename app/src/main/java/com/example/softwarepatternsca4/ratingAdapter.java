@@ -35,7 +35,7 @@ public class ratingAdapter extends FirestoreRecyclerAdapter<Items, ratingAdapter
         holder.category.setText(new StringBuilder("Category: ").append(model.getCategory()));
         holder.manufacturer.setText(new StringBuilder("Manufacturer: ").append(model.getManufacturer()));
         holder.size.setText(new StringBuilder("Size: ").append(model.getSize()));
-        holder.price.setText(new StringBuilder("Price: ").append(model.getPrice()));
+        holder.price.setText(new StringBuilder("Price: €").append(model.getPrice()));
 
         Glide.with(this.context).load(model.getImage()).into(holder.image);
 
